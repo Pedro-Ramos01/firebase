@@ -1,0 +1,5 @@
+command - set NODE_TLS_REJECT_UNAUTHORIZED=0
+
+powershell - $env:node_TLS_REJECT_UNAUTHORIZED="0"
+
+npx export start -c
