@@ -48,6 +48,54 @@ export default function App() {
     }
   }
 
+  async function handleLogin() {
+    try {
+      console.log("Login -->", email.trim());
+      const logged = await signInWithEmailAndPassword(auth, email.trim(), password);
+      console.log("Login OK uid: ", logged.user.uid);
+      Alert.alert("Login ok", logged.user.email ?? "");
+    } catch (error) {
+      console.log("Login failed", error);
+    }
+  }
+
+  async function handleLogout(){
+    try{
+      console.log("Logout !!!");
+      await signOut(auth);
+      console.log("Logout OK");
+      Alert.alert("Logout ok!");
+    } catch (error) {
+      console.log("Login failed", error);
+    }
+  }
+
+  async function AddNote(){
+    try {
+      console.log("ADD Note --> ", noteText);
+      const docRef = await addDoc(collection(db, "notes"), {
+        text: noteText,
+        createdAt: serverTimestamp(),
+        user: userEmail ?? null,
+      })
+      console.log("ADD NOTE OK id: ", docRef.id);
+      setNoteText("")
+      await refreshNotes();
+    } catch (error){
+      console.log("addNote failed", error);
+    }
+
+  }
+
+  async function refreshNotes(){
+    try{
+      console.log("REFRESH NOTES !!!");
+      const response = query
+    } catch (error) {
+      console.log("Refresh failed", error);
+    }
+  }
+
   return (
     <KeyboardAvoidingView
     style={{ flex:1, marginTop:25}}
@@ -81,10 +129,10 @@ export default function App() {
             style={{padding:10, borderWidth:1, borderRadius:10 }}>
               <Text>Criar conta</Text>
             </Pressable>
-            <Pressable style={{padding:10, borderWidth:1, borderRadius:10 }}>
+            <Pressable onPress={handleLogin} style={{padding:10, borderWidth:1, borderRadius:10 }}>
               <Text>Login</Text>
             </Pressable>
-            <Pressable style={{padding:10, borderWidth:1, borderRadius:10 }}>
+            <Pressable onPress={handleLogout} style={{padding:10, borderWidth:1, borderRadius:10 }}>
               <Text>Logout</Text>
             </Pressable>
           </View>
